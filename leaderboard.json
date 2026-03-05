@@ -29,6 +29,35 @@
     }
   },
   {
+    "id": 1772707839483,
+    "name": "Sasas",
+    "email": "Asasas",
+    "score": 8,
+    "date": "2026-03-05T10:50:39.092Z",
+    "answers": {
+      "0:0": "Mother's Day",
+      "0:1": "Red, White, and Blue",
+      "0:2": "The Wooden Door",
+      "0:3": "Global Feminism",
+      "1:3": "Only for conferences",
+      "1:2": "The Vishaka Guidelines",
+      "1:1": "No, complaints must be in writing and signed",
+      "1:0": "Discrimination",
+      "2:3": "Only on some platforms",
+      "2:2": "Two-Step Authentication",
+      "2:1": "www.police.gov.in",
+      "2:0": "To protect from dust",
+      "3:3": "Your house keys or building access card",
+      "3:2": "Make a loud, simulated phone call saying exactly where you are and that someone is waiting outside for you",
+      "3:1": "A password for the cab",
+      "3:0": "Emergency SOS",
+      "4:3": "The bias of denying women credit for their scientific achievements, often attributing them to male colleagues",
+      "4:2": "Ada Lovelace",
+      "4:1": "Roshni Nadar",
+      "4:0": "Sheryl Sandberg"
+    }
+  },
+  {
     "id": 1772699786870,
     "name": "Malliga",
     "email": "malligakum1978@gmail.com",

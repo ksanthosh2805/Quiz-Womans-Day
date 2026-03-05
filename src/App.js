@@ -396,7 +396,6 @@ function App() {
         'S.No': idx + 1,
         'Name': entry.name,
         'Email': entry.email,
-        'Employee ID': entry.employeeId || 'N/A',
         'Score': `${entry.score}/20`,
         'Date': new Date(entry.date).toLocaleString(),
         'Percentage': `${((entry.score / 20) * 100).toFixed(1)}%`
@@ -411,7 +410,6 @@ function App() {
         { wch: 5 },  // S.No
         { wch: 20 }, // Name
         { wch: 30 }, // Email
-        { wch: 15 }, // Employee ID
         { wch: 8 }, // Score
         { wch: 20 }, // Date
         { wch: 12 }  // Percentage
@@ -644,7 +642,6 @@ function App() {
               <tr>
                 <th>Rank</th>
                 <th>Name</th>
-                <th>Employee ID</th>
                 <th>Score</th>
                 <th>Date</th>
               </tr>
@@ -654,7 +651,6 @@ function App() {
                 <tr key={entry.id} className={idx === 0 ? 'top-scorer' : ''}>
                   <td>{idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : idx + 1}</td>
                   <td>{entry.name}</td>
-                  <td>{entry.employeeId || 'N/A'}</td>
                   <td>{entry.score} / 20</td>
                   <td>{new Date(entry.date).toLocaleDateString()}</td>
                 </tr>
@@ -720,7 +716,6 @@ function App() {
                   <h3>#{idx + 1} - {entry.name}</h3>
                 </div>
                 <p><strong>Email:</strong> {entry.email}</p>
-                <p><strong>Employee ID:</strong> {entry.employeeId || 'N/A'}</p>
                 <p><strong>Score:</strong> {entry.score} / 20 ({((entry.score / 20) * 100).toFixed(1)}%)</p>
                 <p><strong>Date:</strong> {new Date(entry.date).toLocaleString()}</p>
               </div>
