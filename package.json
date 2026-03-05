@@ -2,7 +2,6 @@
   "name": "womens-safety-quiz",
   "version": "1.0.0",
   "private": true,
-  "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
     "dev": "concurrently \"npm start\" \"node server.js\"",
