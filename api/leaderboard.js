@@ -1,17 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-
-const LEADERBOARD_FILE = path.join(process.cwd(), 'leaderboard.json');
-
-// Initialize leaderboard file if it doesn't exist
-const initLeaderboard = () => {
-  if (!fs.existsSync(LEADERBOARD_FILE)) {
-    fs.writeFileSync(LEADERBOARD_FILE, JSON.stringify([], null, 2));
-  }
-};
+const { kv } = require('@vercel/kv');
 
 // Get all leaderboard entries
-export default function handler(req, res) {
+export default async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
@@ -22,12 +12,19 @@ export default function handler(req, res) {
     return;
   }
 
-  initLeaderboard();
+  // Ensure leaderboard exists in KV
+  try {
+      const existing = await kv.get('leaderboard');
+      if (!existing) {
+          await kv.set('leaderboard', []);
+      }
+  } catch (err) {
+      console.warn('Could not initialize KV leaderboard:', err.message);
+  }
 
   if (req.method === 'GET') {
     try {
-      const data = fs.readFileSync(LEADERBOARD_FILE, 'utf-8');
-      const leaderboard = JSON.parse(data);
+      const leaderboard = (await kv.get('leaderboard')) || [];
       res.status(200).json(leaderboard);
     } catch (error) {
       console.error('Error reading leaderboard:', error);
@@ -42,9 +39,8 @@ export default function handler(req, res) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
-      // Read current leaderboard
-      const data = fs.readFileSync(LEADERBOARD_FILE, 'utf-8');
-      let leaderboard = JSON.parse(data);
+      // Read current leaderboard from KV
+      let leaderboard = (await kv.get('leaderboard')) || [];
 
       // Add new entry
       const newEntry = {
@@ -61,8 +57,8 @@ export default function handler(req, res) {
       // Sort by score (descending)
       leaderboard.sort((a, b) => b.score - a.score);
 
-      // Save updated leaderboard
-      fs.writeFileSync(LEADERBOARD_FILE, JSON.stringify(leaderboard, null, 2));
+      // Save updated leaderboard to KV
+      await kv.set('leaderboard', leaderboard);
 
       console.log('Quiz submitted:', name, score);
       res.status(200).json({ success: true, entry: newEntry });
@@ -73,13 +69,29 @@ export default function handler(req, res) {
   } else if (req.method === 'DELETE') {
     // Handle delete all responses
     try {
-      fs.writeFileSync(LEADERBOARD_FILE, JSON.stringify([], null, 2));
-      console.log('All leaderboard entries cleared');
+      await kv.set('leaderboard', []);
+      console.log('All leaderboard entries cleared from KV');
       res.status(200).json({ success: true, message: 'All responses cleared' });
     } catch (error) {
       console.error('Error clearing leaderboard:', error);
       res.status(500).json({ success: false, error: error.message });
     }
+  } else if (req.url === '/delete-multiple' && req.method === 'POST') {
+     try {
+       const { ids } = req.body;
+       if (!ids || !Array.isArray(ids)) {
+         return res.status(400).json({ error: 'Missing or invalid IDs array' });
+       }
+
+       let leaderboard = (await kv.get('leaderboard')) || [];
+       leaderboard = leaderboard.filter(entry => !ids.includes(entry.id));
+
+       await kv.set('leaderboard', leaderboard);
+       res.status(200).json({ success: true, message: `${ids.length} responses deleted` });
+     } catch (error) {
+       console.error('Error deleting multiple requests:', error);
+       res.status(500).json({ success: false, error: error.message });
+     }
   } else {
     res.status(405).json({ error: 'Method not allowed' });
   }
