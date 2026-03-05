@@ -5,7 +5,7 @@
   "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
-    "dev": "node server.js",
+    "dev": "concurrently \"npm start\" \"node server.js\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
