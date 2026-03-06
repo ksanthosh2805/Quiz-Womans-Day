@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as XLSX from 'xlsx';
 
 // Dynamic API Base URL - works on both localhost and Vercel
@@ -468,7 +468,7 @@ function App() {
         // Map indices to IDs
         const idsToRemove = indicesToRemove.map(idx => allResponses[idx]?.id).filter(Boolean);
         
-        const deleteResponse = await fetch(`${API_BASE_URL}/leaderboard/delete-multiple`, {
+        const deleteResponse = await fetch(`${API_BASE_URL}/delete-multiple`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ids: idsToRemove })

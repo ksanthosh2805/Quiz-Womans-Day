@@ -112,7 +112,7 @@ app.delete('/api/leaderboard/:id', (req, res) => {
 });
 
 // Delete multiple responses
-app.post('/api/leaderboard/delete-multiple', (req, res) => {
+app.post('/api/delete-multiple', (req, res) => {
   try {
     const { ids } = req.body;
 
